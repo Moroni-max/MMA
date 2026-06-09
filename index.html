@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRON CAGE — Actualité MMA</title>
+<style>
+  :root {
+    --red: #C0101A;
+    --red-dark: #8B0000;
+    --red-light: #FF2233;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #242424;
+    --white: #F5F0EB;
+    --gray: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav {
+    background: var(--black);
+    border-bottom: 3px solid var(--red);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .logo span {
+    color: var(--red);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--red);
+  }
+
+  /* HERO ARTICLE */
+  .hero {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .hero-main {
+    background: var(--dark2);
+    border-left: 6px solid var(--red);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-main::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(192,16,26,0.15) 0%, transparent 70%);
+  }
+
+  .breaking-badge {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 18px;
+  }
+
+  .hero-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+
+  .hero-title {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .hero-excerpt {
+    font-size: 16px;
+    color: #AAA;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .hero-meta {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .hero-meta strong {
+    color: var(--red-light);
+  }
+
+  /* SIDEBAR NEWS */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sidebar-item {
+    background: var(--dark2);
+    padding: 18px 20px;
+    border-left: 3px solid var(--dark3);
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+
+  .sidebar-item:hover {
+    border-left-color: var(--red);
+    background: var(--dark3);
+  }
+
+  .sidebar-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--white);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-date {
+    font-size: 11px;
+    color: var(--gray);
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    max-width: 1100px;
+    margin: 48px auto 24px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-divider h2 {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+    white-space: nowrap;
+  }
+
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--dark3);
+  }
+
+  .section-divider .red-bar {
+    width: 40px;
+    height: 3px;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  /* NEWS GRID */
+  .news-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .news-card {
+    background: var(--dark2);
+    transition: transform 0.2s;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .news-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    background: var(--dark3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-img-placeholder {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, var(--dark3) 0%, #1e1e1e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--red-dark);
+    letter-spacing: -2px;
+    border-bottom: 2px solid var(--dark3);
+  }
+
+  .card-body {
+    padding: 16px 18px 20px;
+  }
+
+  .card-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .card-excerpt {
+    font-size: 13px;
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .card-meta {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--dark3);
+    padding-top: 12px;
+  }
+
+  /* FIGHTERS RANKING */
+  .rankings-section {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ranking-block {
+    background: var(--dark2);
+    padding: 24px;
+  }
+
+  .ranking-title {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dark3);
+  }
+
+  .fighter-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--dark3);
+    transition: padding-left 0.2s;
+    cursor: pointer;
+  }
+
+  .fighter-row:hover {
+    padding-left: 6px;
+  }
+
+  .fighter-rank {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--dark3);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+  }
+
+  .fighter-row:first-child .fighter-rank {
+    color: var(--red);
+  }
+
+  .fighter-name {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--white);
+    flex: 1;
+  }
+
+  .fighter-record {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  .champ-badge {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--red);
+    color: var(--white);
+    padding: 3px 8px;
+    flex-shrink: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2);
+    border-top: 3px solid var(--red-dark);
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .footer-logo span { color: var(--red); }
+
+  .footer-sub {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .rankings-section { grid-template-columns: 1fr; }
+    .hero-title { font-size: 28px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">IRON<span>CAGE</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Accueil</a></li>
+      <li><a href="events.html">Événements</a></li>
+      <li><a href="#">Fighters</a></li>
+      <li><a href="#">Vidéos</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-main">
+    <div class="breaking-badge">⚡ Breaking</div>
+    <div class="hero-tag">UFC · Poids Lourds</div>
+    <h1 class="hero-title">Jon Jones défend son titre contre Stipe Miocic — la revanche de la décennie</h1>
+    <p class="hero-excerpt">Après des mois de négociations et une blessure qui a failli tout faire capoter, le combat est enfin confirmé. Jones, invaincu depuis son retour chez les lourds, affrontera le recordman de défenses de la ceinture lors de l'UFC 317.</p>
+    <div class="hero-meta">Par <strong>Rédaction IRONCAGE</strong> · 08 Juin 2026 · 5 min de lecture</div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-item">
+      <div class="sidebar-tag">Bellator · Résultat</div>
+      <div class="sidebar-title">Coopman remporte le titre européen par KO au 2e round</div>
+      <div class="sidebar-date">08 Juin 2026</div>
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-tag">ONE Championship</div>
+      <div class="sidebar-title">Superlek annonce sa retraite à 38 ans — la légende du Muay Thai tire sa révérence</div>
+      <div class="sidebar-date">07 Juin 2026</div>
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-tag">UFC · Transfer</div>
+      <div class="sidebar-title">Islam Makhachev ouvre la porte à un défi chez les poids welters</div>
+      <div class="sidebar-date">07 Juin 2026</div>
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-tag">PFL · Annonce</div>
+      <div class="sidebar-title">Francis Ngannou vs Fury 2 : la PFL officialise le choc pour septembre</div>
+      <div class="sidebar-date">06 Juin 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS GRID -->
+<div class="section-divider">
+  <div class="red-bar"></div>
+  <h2>Dernières actus</h2>
+</div>
+
+<div class="news-grid">
+  <div class="news-card">
+    <div class="card-img-placeholder">UFC</div>
+    <div class="card-body">
+      <div class="card-tag">UFC · Poids Légers</div>
+      <div class="card-title">Poirier prend sa retraite : "J'ai tout donné à ce sport"</div>
+      <p class="card-excerpt">Le Diamond annonce la fin de sa carrière dans une lettre ouverte touchante. Retour sur 15 ans de combats au sommet.</p>
+      <div class="card-meta"><span>RÉSULTAT</span><span>07 Juin 2026</span></div>
+    </div>
+  </div>
+
+  <div class="news-card">
+    <div class="card-img-placeholder">K-1</div>
+    <div class="card-body">
+      <div class="card-tag">K-1 · Europe</div>
+      <div class="card-title">Cédric Doumbé : "Mon objectif est le MMA, pas le show"</div>
+      <p class="card-excerpt">Le champion français se confie en exclusivité sur sa transition vers le MMA et ses ambitions au niveau mondial.</p>
+      <div class="card-meta"><span>INTERVIEW</span><span>06 Juin 2026</span></div>
+    </div>
+  </div>
+
+  <div class="news-card">
+    <div class="card-img-placeholder">ONE</div>
+    <div class="card-body">
+      <div class="card-tag">ONE Championship · Analyse</div>
+      <div class="card-title">Pourquoi ONE est devenu le meilleur show MMA du monde ?</div>
+      <p class="card-excerpt">Production, règles, salaires — l'analyse complète d'une organisation qui a su se réinventer en 5 ans.</p>
+      <div class="card-meta"><span>DOSSIER</span><span>05 Juin 2026</span></div>
+    </div>
+  </div>
+
+  <div class="news-card">
+    <div class="card-img-placeholder">PFL</div>
+    <div class="card-body">
+      <div class="card-tag">PFL · Transfer</div>
+      <div class="card-title">Manel Kape signe à la PFL : le danger volant change de camp</div>
+      <p class="card-excerpt">Surprenant retournement de situation pour le Mozambicain qui quitte l'UFC après 3 ans dans les poids mouches.</p>
+      <div class="card-meta"><span>TRANSFER</span><span>05 Juin 2026</span></div>
+    </div>
+  </div>
+
+  <div class="news-card">
+    <div class="card-img-placeholder">UFC</div>
+    <div class="card-body">
+      <div class="card-tag">UFC · Femmes</div>
+      <div class="card-title">Zhang Weili vs Yan Xiaonan : le derby chinois en tête d'affiche</div>
+      <p class="card-excerpt">Pour la première fois dans l'histoire de l'UFC, deux combattantes chinoises s'affronteront pour un titre mondial.</p>
+      <div class="card-meta"><span>ANNONCE</span><span>04 Juin 2026</span></div>
+    </div>
+  </div>
+
+  <div class="news-card">
+    <div class="card-img-placeholder">BJJ</div>
+    <div class="card-body">
+      <div class="card-tag">Technique · Grappling</div>
+      <div class="card-title">Le heel hook inversé : l'arme secrète qui fait trembler le MMA moderne</div>
+      <p class="card-excerpt">Depuis Khabib, le grappling a envahi l'UFC. Focus sur la technique de soumission qui effraie les plus grands champions.</p>
+      <div class="card-meta"><span>TECHNIQUE</span><span>03 Juin 2026</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- RANKINGS -->
+<div class="section-divider">
+  <div class="red-bar"></div>
+  <h2>Classements UFC</h2>
+</div>
+
+<div class="rankings-section">
+  <div class="ranking-block">
+    <div class="ranking-title">Poids Lourds (–120 kg)</div>
+    <div class="fighter-row">
+      <span class="fighter-rank">C</span>
+      <span class="fighter-name">Jon Jones</span>
+      <span class="champ-badge">Champion</span>
+      <span class="fighter-record">27-1</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#1</span>
+      <span class="fighter-name">Stipe Miocic</span>
+      <span class="fighter-record">20-4</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#2</span>
+      <span class="fighter-name">Ciryl Gane</span>
+      <span class="fighter-record">13-2</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#3</span>
+      <span class="fighter-name">Tom Aspinall</span>
+      <span class="fighter-record">15-3</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#4</span>
+      <span class="fighter-name">Sergei Pavlovich</span>
+      <span class="fighter-record">18-2</span>
+    </div>
+  </div>
+
+  <div class="ranking-block">
+    <div class="ranking-title">Poids Légers (–70 kg)</div>
+    <div class="fighter-row">
+      <span class="fighter-rank">C</span>
+      <span class="fighter-name">Islam Makhachev</span>
+      <span class="champ-badge">Champion</span>
+      <span class="fighter-record">26-1</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#1</span>
+      <span class="fighter-name">Charles Oliveira</span>
+      <span class="fighter-record">34-10</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#2</span>
+      <span class="fighter-name">Dustin Poirier</span>
+      <span class="fighter-record">30-9</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#3</span>
+      <span class="fighter-name">Arman Tsarukyan</span>
+      <span class="fighter-record">22-3</span>
+    </div>
+    <div class="fighter-row">
+      <span class="fighter-rank">#4</span>
+      <span class="fighter-name">Beneil Dariush</span>
+      <span class="fighter-record">22-5</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">IRON<span>CAGE</span></div>
+  <div class="footer-sub">L'actualité MMA sans filtre · 2026</div>
+</footer>
+
+</body>
+</html>
