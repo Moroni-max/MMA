@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRON CAGE — Fighters</title>
+<style>
+  :root {
+    --red: #C0101A;
+    --red-dark: #8B0000;
+    --red-light: #FF2233;
+    --black: #0A0A0A;
+    --dark2: #1A1A1A;
+    --dark3: #242424;
+    --white: #F5F0EB;
+    --gray: #888;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--black); color:var(--white); font-family:'Arial Narrow',Arial,sans-serif; }
+  a { color:inherit; text-decoration:none; }
+
+  nav { background:var(--black); border-bottom:3px solid var(--red); position:sticky; top:0; z-index:100; }
+  .nav-inner { max-width:1100px; margin:0 auto; padding:0 20px; display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .logo { font-size:28px; font-weight:900; letter-spacing:4px; text-transform:uppercase; }
+  .logo span { color:var(--red); }
+  .nav-links { display:flex; gap:30px; list-style:none; }
+  .nav-links a { font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gray); transition:color .2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--red); }
+
+  .page-header { max-width:1100px; margin:40px auto 32px; padding:0 20px 0 26px; border-left:6px solid var(--red); }
+  .page-header h1 { font-size:38px; font-weight:900; text-transform:uppercase; letter-spacing:2px; }
+  .page-header p { font-size:14px; color:var(--gray); letter-spacing:1px; text-transform:uppercase; margin-top:6px; }
+
+  /* FILTER */
+  .filter-bar { max-width:1100px; margin:0 auto 32px; padding:0 20px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .filter-btn { padding:8px 20px; border:1px solid var(--dark3); background:transparent; color:var(--gray); font-size:11px; font-weight:800; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s; font-family:'Arial Narrow',Arial,sans-serif; }
+  .filter-btn:hover { border-color:var(--red); color:var(--white); }
+  .filter-btn.active { background:var(--red); border-color:var(--red); color:var(--white); }
+  .search-box { margin-left:auto; }
+  .search-box input { background:var(--dark2); border:1px solid var(--dark3); color:var(--white); font-size:13px; padding:8px 16px; font-family:'Arial Narrow',Arial,sans-serif; letter-spacing:1px; outline:none; width:220px; }
+  .search-box input::placeholder { color:var(--gray); }
+  .search-box input:focus { border-color:var(--red); }
+
+  /* FIGHTERS GRID */
+  .fighters-grid { max-width:1100px; margin:0 auto 60px; padding:0 20px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+
+  .fighter-card { background:var(--dark2); overflow:hidden; cursor:pointer; transition:transform .2s; position:relative; }
+  .fighter-card:hover { transform:translateY(-4px); }
+  .fighter-card:hover .card-overlay { opacity:1; }
+
+  .card-photo { width:100%; height:260px; object-fit:cover; object-position:top; display:block; background:var(--dark3); filter:grayscale(30%); transition:filter .3s; }
+  .fighter-card:hover .card-photo { filter:grayscale(0%); }
+
+  .card-overlay { position:absolute; top:0; left:0; right:0; height:260px; background:linear-gradient(to bottom, transparent 40%, rgba(192,16,26,0.6) 100%); opacity:0; transition:opacity .3s; }
+
+  .champ-ribbon { position:absolute; top:12px; left:0; background:var(--red); color:var(--white); font-size:9px; font-weight:900; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; }
+
+  .card-body { padding:14px 16px 18px; border-top:3px solid var(--dark3); transition:border-color .2s; }
+  .fighter-card:hover .card-body { border-top-color:var(--red); }
+
+  .card-org { font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:4px; }
+  .card-name { font-size:19px; font-weight:900; text-transform:uppercase; letter-spacing:1px; line-height:1.1; margin-bottom:2px; }
+  .card-nickname { font-size:12px; color:var(--gray); font-style:italic; margin-bottom:10px; }
+
+  .card-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-bottom:10px; }
+  .stat { background:var(--dark3); padding:6px 4px; text-align:center; }
+  .stat-val { font-size:16px; font-weight:900; color:var(--white); line-height:1; }
+  .stat-lbl { font-size:9px; color:var(--gray); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+
+  .card-footer { display:flex; justify-content:space-between; align-items:center; }
+  .card-division { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); }
+  .card-country { font-size:16px; }
+
+  footer { background:var(--dark2); border-top:3px solid var(--red-dark); padding:30px 20px; text-align:center; }
+  .footer-logo { font-size:22px; font-weight:900; letter-spacing:4px; text-transform:uppercase; margin-bottom:8px; }
+  .footer-logo span { color:var(--red); }
+  .footer-sub { font-size:12px; color:var(--gray); letter-spacing:2px; text-transform:uppercase; }
+
+  @media(max-width:900px){ .fighters-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .fighters-grid{ grid-template-columns:1fr; } .nav-links{display:none;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">IRON<span>CAGE</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="events.html">Événements</a></li>
+      <li><a href="fighters.html" class="active">Fighters</a></li>
+      <li><a href="videos.html">Vidéos</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Fighters</h1>
+  <p>Profils · Records · Statistiques · UFC · ONE · Bellator</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">Tous</button>
+  <button class="filter-btn" onclick="filter('heavyweight',this)">Lourds</button>
+  <button class="filter-btn" onclick="filter('lightweight',this)">Légers</button>
+  <button class="filter-btn" onclick="filter('welterweight',this)">Welters</button>
+  <button class="filter-btn" onclick="filter('middleweight',this)">Moyens</button>
+  <button class="filter-btn" onclick="filter('women',this)">Femmes</button>
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Rechercher un fighter..." oninput="searchFighters()">
+  </div>
+</div>
+
+<div class="fighters-grid" id="grid">
+
+  <div class="fighter-card" data-div="heavyweight">
+    <div class="champ-ribbon">Champion UFC</div>
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Jon_Jones_2021.jpg/440px-Jon_Jones_2021.jpg" alt="Jon Jones" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Jon_Jones_2021.jpg/440px-Jon_Jones_2021.jpg'; this.onerror=null; this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Jon Jones</div>
+      <div class="card-nickname">"Bones"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">27</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">1</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Poids Lourds</span>
+        <span class="card-country">🇺🇸</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="lightweight">
+    <div class="champ-ribbon">Champion UFC</div>
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Islam_Makhachev_UFC_284.jpg/440px-Islam_Makhachev_UFC_284.jpg" alt="Islam Makhachev" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Islam Makhachev</div>
+      <div class="card-nickname">"The Dagestani"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">26</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">1</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">9</div><div class="stat-lbl">Soumissions</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Poids Légers</span>
+        <span class="card-country">🇷🇺</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="welterweight">
+    <div class="champ-ribbon">Champion UFC</div>
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Leon_Edwards_UFC_278.jpg/440px-Leon_Edwards_UFC_278.jpg" alt="Leon Edwards" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Leon Edwards</div>
+      <div class="card-nickname">"Rocky"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">21</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Welterweights</span>
+        <span class="card-country">🇬🇧</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="middleweight">
+    <div class="champ-ribbon">Champion UFC</div>
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Alex_Pereira_UFC_281_%28cropped%29.jpg/440px-Alex_Pereira_UFC_281_%28cropped%29.jpg" alt="Alex Pereira" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Alex Pereira</div>
+      <div class="card-nickname">"Poatan"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">2</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Mi-Lourds</span>
+        <span class="card-country">🇧🇷</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="lightweight">
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Charles_Oliveira_UFC_269_%28cropped%29.jpg/440px-Charles_Oliveira_UFC_269_%28cropped%29.jpg" alt="Charles Oliveira" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Charles Oliveira</div>
+      <div class="card-nickname">"Do Bronx"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">34</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">21</div><div class="stat-lbl">Soumissions</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Poids Légers</span>
+        <span class="card-country">🇧🇷</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="heavyweight">
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Ciryl_Gane_2021.jpg/440px-Ciryl_Gane_2021.jpg" alt="Ciryl Gane" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Ciryl Gane</div>
+      <div class="card-nickname">"Bon Gamin"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">13</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">2</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Poids Lourds</span>
+        <span class="card-country">🇫🇷</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="welterweight">
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Kamaru_Usman_2019.jpg/440px-Kamaru_Usman_2019.jpg" alt="Kamaru Usman" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Kamaru Usman</div>
+      <div class="card-nickname">"The Nigerian Nightmare"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">20</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">9</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Welterweights</span>
+        <span class="card-country">🇳🇬</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fighter-card" data-div="women">
+    <div class="champ-ribbon">Championne UFC</div>
+    <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Zhang_Weili_UFC_261_%28cropped%29.jpg/440px-Zhang_Weili_UFC_261_%28cropped%29.jpg" alt="Zhang Weili" onerror="this.style.background='#1a1a1a'">
+    <div class="card-overlay"></div>
+    <div class="card-body">
+      <div class="card-org">UFC</div>
+      <div class="card-name">Zhang Weili</div>
+      <div class="card-nickname">"Magnum"</div>
+      <div class="card-stats">
+        <div class="stat"><div class="stat-val">24</div><div class="stat-lbl">Victoires</div></div>
+        <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">Défaites</div></div>
+        <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">KO/TKO</div></div>
+      </div>
+      <div class="card-footer">
+        <span class="card-division">Paille (Femmes)</span>
+        <span class="card-country">🇨🇳</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">IRON<span>CAGE</span></div>
+  <div class="footer-sub">L'actualité MMA sans filtre · 2026</div>
+</footer>
+
+<script>
+function filter(div, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.fighter-card').forEach(card => {
+    card.style.display = (div === 'all' || card.dataset.div === div) ? 'block' : 'none';
+  });
+}
+function searchFighters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.fighter-card').forEach(card => {
+    const name = card.querySelector('.card-name').textContent.toLowerCase();
+    const nick = card.querySelector('.card-nickname').textContent.toLowerCase();
+    card.style.display = (name.includes(q) || nick.includes(q)) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>
